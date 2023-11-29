@@ -200,29 +200,32 @@ a {
   padding-right: 12px;
 } */
 nav {
-  background-color: transparent;
+  background-color: rgb(48, 38, 186);
   overflow: hidden;
-  padding-top: 11px;
-  padding-left: 14px;
-  padding-right: 4px;
-  padding-bottom: 45px;
+  padding-top: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
 }
 
 nav a {
   float: left;
   display: block;
-  color: black;
+  color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
   background: transparent;
+  font-size: 15px;
 }
 
-nav a::after {
+nav a:hover {
   background-color: transparent;
   color: black;
   border-bottom: #5A8DEE solid 2px;
   transition: width 0.3s ease;
+  font-weight: bolder;
+  font-size: 17px;
 }
 
 .dropdown {
@@ -267,8 +270,9 @@ nav a::after {
   display: flex;
   justify-content: space-between;
   border-bottom: 1.4px solid #5A8DEE;
-  background: white;
-  border-radius: 7px;
+  background: transparent;
+  border-radius: 0px;
+  color: white;
 }
 
 #contenedor-left {
@@ -277,5 +281,9 @@ nav a::after {
   justify-content: center;
   position: relative;
   left: 20px;
+  font-size: 15px;
+}
+
+#contenedor-right {
 
 }

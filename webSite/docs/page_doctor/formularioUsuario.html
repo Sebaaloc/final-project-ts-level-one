@@ -22,16 +22,14 @@
                 </div>
                 <div id="contenedor-right">
                     <div class="dropdown">
-                        <button class="dropbtn">User Action
+                        <button class="dropbtn">Doctor Action
                             <i class="fa fa-caret-down"></i>
                         </button>
                         <div class="dropdown-content">
                             <a href="formularioUsuario.html">Update Data Personal</a>
-                            <a href="facturas.html">Check Bills</a>
                         </div>
                     </div>
                     <a href="#home">appointments</a>
-                    <a href="#about">PQR</a>
 
                 </div>
             </div>
@@ -42,7 +40,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
-                                <h3 class='card-heading p-1 pl-3'>User Data Form</h3>
+                                <h3 class='card-heading p-1 pl-3'>Doctor Data Form</h3>
                                 <i data-feather="user-check" class="iconos-user" style="font-size: 30px; "></i>
                             </div>
                             <div class="card-body">
@@ -187,8 +185,8 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button type="button" class="btn btn-primary" onclick="update()" id="updateUser">Update
-                                    Data <i data-feather="edit"></i> </button>
+                                <button type="button" class="btn btn-primary" onclick="update()" id="updateUser">Update Data <i
+                                        data-feather="edit"></i> </button>
                             </div>
                         </div>
                     </div>
@@ -204,20 +202,9 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
-        const gender = {
-            male: 'm',
-            female: 'f',
-            other: 'na'
-        }
+        jQuery("#updateUser")
 
-        const identificationType = {
-            citizenId: 'CC',
-            foreignId: 'CE',
-            passport: 'passport',
-            identityCard: 'identityCard'
-        }
-
-        const update = async () => {
+        const update = () => {
             updateUser.name = jQuery("#grupo_nombre").val();
             updateUser.middleName = jQuery("#grupo_segundo_nombre").val();
             updateUser.id = jQuery("#grupo_numident").val();
@@ -228,24 +215,9 @@
             updateUser.lastNames = jQuery("#grupo_apellido").val();
             updateUser.cellPhoneNumber = jQuery("#grupo_telefono").val();
             updateUser.sisben = jQuery("#sisben").val();
-            updateUser.gender = gender[jQuery("#genderUser").val()];
-            updateUser.identificationType = identificationType[jQuery("#typeIdent").val()];
+            updateUser.gender = jQuery("#genderUser").val();
+            updateUser.identificationType = jQuery ("#typeIdent").val();
             console.log(updateUser);
-
-            
-            try {
-                await axios.patch('http://localhost:3000/affiliate', updateUser);
-                location.reload();
-            } catch (error) {
-                console.log(error);
-                Swal.fire({
-                    position: "center",
-                    icon: "danger",
-                    title: error.message,
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }
         }
 
         const updateUser = {
@@ -281,6 +253,18 @@
             console.log(response);
             console.log(updateUser);
 
+            const gender = {
+                male: 'm',
+                female: 'f',
+                other: 'na'
+            }
+
+            const identificationType = {
+                citizenId: 'CC',
+                foreignId: 'CE',
+                passport: 'passport',
+                identityCard: 'identityCard'
+            }
 
             jQuery("#grupo_nombre").val(response.data.name);
             jQuery("#grupo_segundo_nombre").val(response.data.middleName);
