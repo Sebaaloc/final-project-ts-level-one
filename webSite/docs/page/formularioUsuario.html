@@ -210,9 +210,22 @@
             other: 'na'
         }
 
+        const genderMapper = {
+            m: 'male',
+            f: 'female',
+            na: 'other'
+        }
+
         const identificationType = {
             citizenId: 'CC',
             foreignId: 'CE',
+            passport: 'passport',
+            identityCard: 'identityCard'
+        }
+
+        const identificationTypeMapper = {
+            CC: 'citizenId',
+            CE: 'foreignId',
             passport: 'passport',
             identityCard: 'identityCard'
         }
@@ -227,9 +240,9 @@
             updateUser.postalCode = jQuery("#codPostal").val();
             updateUser.lastNames = jQuery("#grupo_apellido").val();
             updateUser.cellPhoneNumber = jQuery("#grupo_telefono").val();
-            updateUser.sisben = jQuery("#sisben").val();
-            updateUser.gender = gender[jQuery("#genderUser").val()];
-            updateUser.identificationType = identificationType[jQuery("#typeIdent").val()];
+            updateUser.sisben = jQuery("#sisben").val() === 1 ? true : false;
+            updateUser.gender = genderMapper[jQuery("#genderUser").val()];
+            updateUser.identificationType = identificationTypeMapper[jQuery("#typeIdent").val()];
             console.log(updateUser);
 
             
