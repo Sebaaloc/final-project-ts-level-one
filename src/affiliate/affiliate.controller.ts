@@ -85,8 +85,6 @@ export class AffiliateController {
 
   @Patch()
   async update(@Body() affiliate: AffiliateDTO): Promise<IUpdateResponse> {
-    console.log('patch', affiliate)
-
     try {
       const affiliateToUpdate = await affiliateSchema.validateAsync(affiliate);
 
