@@ -14,7 +14,7 @@ export class AuthenticationServices {
   async find(
     user: string,
     password: string,
-  ): Promise<AuthenticationDTO> {
+  ): Promise<AuthenticationResponseDTO> {
     return this.AuthenticationModel.findOne({
       user,
       password,

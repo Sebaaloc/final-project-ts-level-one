@@ -21,33 +21,6 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-
-```
-2 Modulos
-
-1 modulo -> Paciente: 
-
-crear, modificar y "cancelar" informacion basica del usuario (nombre, contacto, direccion, correo.... ), NO SE VA A ELIMINAR LA INFORMACION DEL USUARIO
-
-vamos a manejar la "eliminacion" con estados:
-
-ACTIVE -> el paciente puede solicitar toda su informacion medica, tratamientos, autorizaciones, etc
-
-INACTIVE -> el paciente puede solicitar una factura para pagar lo que debe y volver a estar activo (no se va a realizar una pasarela de pagos)
-
-enviar por correo despues del pago las facturas electronicas
-
-consultar facturas desde pagina
-
-Consultar si se esta en grupos de control por enfermedades hipertension, obseidad, etc...
-
-Solicitud y cancelacion de citas medicas (con condiciones de cancelacion y modificacion, reglas de negocio)
-
-Solicitud de transferencia de sede
-
-PQRS
-```
-
 ## DB Schemas
 
 These are the schemas we will follow during the development of the project.

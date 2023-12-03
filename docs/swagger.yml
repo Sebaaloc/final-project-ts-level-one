@@ -10,8 +10,14 @@ servers:
 tags:
   - name: affiliate
     description: Endpoints for affiliate CRUD for various operations
-  - name: medic
-    description: Endpoints for medic CRUD for various operations
+  - name: appointment-schedule
+    description: Endpoints for appointment schedule CRUD for various operations
+  - name: authentication
+    description: endpoint for Authenticating
+  - name: invoice
+    description: Endpoints for invoice CRUD for various operations
+  - name: laboral-inhability
+    description: Endpoints for invoice CRUD for various operations  
 
 paths:
   /affiliate:
@@ -44,7 +50,7 @@ paths:
                     type: string
                     example: there was an error on the request
         '404':
-          description: Invalid request
+          description: not found
           content:
             application/json:
               schema:
@@ -210,7 +216,7 @@ paths:
                     type: string
                     example: 'User: 12345 is currently disabled'
         '404':
-          description: Invalid request
+          description: not found
           content:
             application/json:
               schema:
@@ -229,6 +235,554 @@ paths:
                   message:
                     type: string
                     example: 'There was an error' 
+  /appointment-schedule:
+    get:
+      tags:
+        - appointment-schedule
+      description: Returns a list of appointments
+      parameters:
+        - name: locationId
+          required: true
+          in: query
+          description: location to query appointments
+          schema:
+            type: string
+        - name: day
+          required: true
+          in: query
+          description: day to query appointments
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succesfully return the specified affiliate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentSchedule'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: there was an error on the request
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'No schedules on location: 1 for day: monday'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'There was an error'
+  /authentication:
+    get:
+      tags:
+        - authentication
+      description: Authenticates against DB and returns role of user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Authentication'
+      responses:
+        '200':
+          description: Succesfully return the specified affiliate
+          content:
+            application/json:
+              schema:
+                type: object  
+                properties:
+                  message:
+                    type: string
+                    example: user and password are correct
+                  role:
+                    type: string
+                    example: MEDIC
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: there was an error on the request
+        '403':
+          description: not authorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: user or password are wrong
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'There was an error'
+  /invoice:
+    get:
+      tags:
+        - invoice
+      description: Returns a specified invoice 
+      parameters:
+        - name: idAffiliate
+          required: true
+          in: query
+          description: id of the affiliate to search
+          schema:
+            type: string
+        - name: status
+          required: true
+          in: query
+          description: status of the invoice to search
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succesfully return the specified invoices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: there was an error on the request
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'User: 12345 does not have invoices with status: PAID'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'There was an error'
+    post:
+      tags:
+          - invoice
+      description: Creates a new invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+      responses:
+        '201':
+          description: Succesfully creates the specified invoice
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: there was an error on the request
+        '409':
+          description: Conflict, affiliate already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: invoice 1 already exists
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'There was an error'
+    patch:
+      tags:
+        - invoice
+      description: Pays a single invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idAffiliate:
+                  type: string
+                  example: '1234567'
+                invoiceId: 
+                  type: string
+                  example: '1'
+      responses:
+        '200':
+          description: Succesfully updates the specified affiliate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: there was an error on the request
+        '404':
+          description: Can't find invoice to update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'User: 12345 does not have 1 invoice to update'
+        '409':
+          description: Conflict, invoice already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'Invoice: 1 for user: 12345 is not pending payment'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'There was an error'
+    delete:
+      tags:
+        - invoice
+      description: Makes a user disabled within the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idAffiliate:
+                  type: string
+                  example: '1234567'
+                invoiceId: 
+                  type: string
+                  example: '1'
+      responses:
+        '200':
+          description: Affiliate succesfully disabled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: 
+                    type: string
+                    example: User 12345 has been disabled
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: there was an error on the request
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'User: 12345 does not have 1 invoice to cancel'
+        '409':
+          description: Conflict, invoice already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'Invoice: 1 for user: 123456 is not pending payment, therefore cannot be cancelled'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'There was an error' 
+  /laboral-inhability:
+    get:
+      tags:
+        - laboral-inhability
+      description: Returns a specified laboral inhability 
+      parameters:
+        - name: idAffiliate
+          required: true
+          in: query
+          description: id of the affiliate to search
+          schema:
+            type: string
+        - name: status
+          required: true
+          in: query
+          description: status of the laboral inhability to search
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succesfully return the specified laboral inhability
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaboralInhability'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: there was an error on the request
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'User: 12345 does not have laboral inhabilities with status: ACTIVE'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'There was an error'
+    post:
+      tags:
+          - laboral-inhability
+      description: Creates a new laboral inhability
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LaboralInhability'
+      responses:
+        '201':
+          description: Succesfully creates the specified laboral inhability
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaboralInhability'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: there was an error on the request
+        '409':
+          description: Conflict, affiliate already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: laboral inhability 1 already exists
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'There was an error'
+    patch:
+      tags:
+        - laboral-inhability
+      description: Pays a single invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LaboralInhability'
+      responses:
+        '200':
+          description: Succesfully updates the specified affiliate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: there was an error on the request
+        '404':
+          description: Can't find invoice to update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'User: 12345 does not have 1 laboral inhability to update'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'There was an error'
+    delete:
+      tags:
+        - laboral-inhability
+      description: Deletes a laboral inhability
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idAffiliate:
+                  type: string
+                  example: '1234567'
+                id: 
+                  type: string
+                  example: '1'
+      responses:
+        '200':
+          description: Affiliate succesfully disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: there was an error on the request
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'User: 12345 does not have 1 laboral inhability to delete'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+                    example: 'There was an error' 
+    
 
 components:              
   schemas:
@@ -336,3 +890,133 @@ components:
         matchedCount:
           type: number
           example: 1
+    DeleteResponse:
+      type: object
+      properties:
+        acknowledged:
+          type: boolean
+          example: true
+        deletedCount: 
+          type: number
+          example: 1
+    AppointmentSchedule:
+      type: object
+      properties:
+        monday: 
+          $ref: '#/components/schemas/AppointmentScheduleKeys'
+        tuesday: 
+          $ref: '#/components/schemas/AppointmentScheduleKeys'
+        wednesday: 
+          $ref: '#/components/schemas/AppointmentScheduleKeys'
+        thursday: 
+          $ref: '#/components/schemas/AppointmentScheduleKeys'
+        friday: 
+          $ref: '#/components/schemas/AppointmentScheduleKeys'
+        saturday: 
+          $ref: '#/components/schemas/AppointmentScheduleKeys'
+        locationid:
+          type: string
+          example: '1'
+    AppointmentScheduleKeys:
+      type: object
+      properties:
+        '08:00': 
+          type: array
+          items:
+            type: string
+            example: medic Luisa
+        '09:00': 
+          type: array
+          items:
+            type: string
+            example: medic Luisa
+        '10:00': 
+          type: array
+          items:
+            type: string
+            example: medic Luisa
+        '11:00': 
+          type: array
+          items:
+            type: string
+            example: medic Luisa
+        '12:00': 
+          type: array
+          items:
+            type: string
+            example: medic Luisa
+        '13:00': 
+          type: array
+          items:
+            type: string
+            example: medic Luisa
+        '14:00': 
+          type: array
+          items:
+            type: string
+            example: medic Luisa
+        '15:00': 
+          type: array
+          items:
+            type: string
+            example: medic Luisa
+        '16:00': 
+          type: array
+          items:
+            type: string
+            example: medic Luisa
+        '17:00': 
+          type: array
+          items:
+            type: string
+            example: medic Luisa
+    Authentication:
+      type: object
+      properties:
+        user: 
+          type: string
+          example: algo@email.com
+        password:
+          type: string
+          example: algo@email.com
+    Invoice:
+      type: object
+      properties:
+        idAffiliate: 
+          type: string
+          example: '123456789'
+        creationDate:
+          type: string
+          example: '2023-12-02T16:53:25.621Z'
+        html: 
+          type: string
+          example: '<h1/>'
+        status: 
+          type: string
+          enum:
+            - PAID
+            - PENDING_PAYMENT
+            - CANCELLED
+          example: PAID            
+        invoiceId: 
+          type: string
+          example: 1
+    LaboralInhability: 
+      type: object
+      properties:  
+        idAffiliate:
+          type: string
+          example: '12345'
+        description:
+          type: string
+          example: '12345'
+        expirationDate:
+          type: string
+          example: '2023-12-02T16:53:25.621Z'
+        status: 
+          type: string
+          enum:
+            - ACTIVE
+            - EXPIRED
+          example: '12345'
+              

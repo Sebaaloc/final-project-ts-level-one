@@ -30,7 +30,7 @@ export class AppointmentScheduleControllers {
       if (!appointmentSchedule) {
         throw new HttpException(
           `No schedules on location: ${locationId} for day: ${day}`,
-          HttpStatus.FORBIDDEN,
+          HttpStatus.NOT_FOUND,
         );
       }
 

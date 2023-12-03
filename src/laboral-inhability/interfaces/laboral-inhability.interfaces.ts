@@ -1,10 +1,11 @@
 import { Document, ObjectId } from 'mongoose';
+import { LaboralInhabilityStatus } from '../types';
 
 export interface ILaboralInhability extends Document {
   readonly idAffiliate: string;
   readonly description: string;
   readonly expirationDate: Date;
-  readonly status: string;
+  readonly status: LaboralInhabilityStatus;
 }
 
 export interface IUpdateResponse {

@@ -1,10 +1,11 @@
 import { Document, ObjectId } from 'mongoose';
+import { InvoiceStatus } from '../types';
 
 export interface IInvoice extends Document {
   readonly idAffiliate: string;
   readonly creationDate: Date;
   readonly html: string;
-  readonly status: string;
+  readonly status: InvoiceStatus;
   readonly invoiceId: string;
 }
 
